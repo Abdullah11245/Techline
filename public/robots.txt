@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Specific rules
+Disallow: /private/
+Disallow: /.env*
+
+# Crawl delay (optional, adjust as needed)
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://tline.ie/sitemap.xml

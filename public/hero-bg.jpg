@@ -1,0 +1,12 @@
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#004b6a;stop-opacity:0.05" />
+      <stop offset="100%" style="stop-color:#3eaf47;stop-opacity:0.05" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#gradient)" />
+  <text x="600" y="200" text-anchor="middle" dominant-baseline="middle" font-size="48" font-weight="bold" fill="#004b6a" font-family="sans-serif" opacity="0.3">
+    Hero Background
+  </text>
+</svg>
