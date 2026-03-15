@@ -58,9 +58,8 @@ export const Contact: React.FC = () => {
       >
         <Typewriter
           text="Get in Touch"
-          speed={200}
-          deleteSpeed={100}
-          delay={1500}
+          speed={100}
+         
           className="text-2xl md:text-5xl font-bold text-white"
         />
       </motion.h1>

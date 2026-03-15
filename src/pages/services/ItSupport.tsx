@@ -73,9 +73,8 @@ export const ItSupport: React.FC = () => {
               >
                <Typewriter
         text={service.title}
-        speed={200}
-        deleteSpeed={100}
-        delay={1500}
+        speed={100}
+       
         className="text-3xl font-bold md:4xl text-white mb-4"
       />
               </motion.h1>
