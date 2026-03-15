@@ -74,7 +74,7 @@ export const Home: React.FC = () => {
 
         {/* Headline */}
         <motion.h1
-          className="mt-2 md:mt-8 max-w-4xl text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl"
+          className="mt-8  font-bold leading-tight text-white "
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05 }}
@@ -82,7 +82,7 @@ export const Home: React.FC = () => {
          <Typewriter
   text="Transform Your IT Infrastructure"
   speed={80}
-  className="text-2xl md:text-5xl font-bold text-white"
+  className="text-xl md:text-5xl font-bold text-white"
 />
         </motion.h1>
 
