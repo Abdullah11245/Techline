@@ -81,9 +81,7 @@ export const Home: React.FC = () => {
         >
          <Typewriter
   text="Transform Your IT Infrastructure"
-  speed={200}
-  deleteSpeed={100}
-  delay={1500}
+  speed={80}
   className="text-2xl md:text-5xl font-bold text-white"
 />
         </motion.h1>
@@ -100,7 +98,7 @@ export const Home: React.FC = () => {
         </motion.p>
 
         {/* CTAs */}
-        <motion.div
+        {/* <motion.div
           className="mt-8 flex flex-wrap items-center justify-center gap-3"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,7 +119,7 @@ export const Home: React.FC = () => {
               Book a Demo
             </Button>
           </a>
-        </motion.div>
+        </motion.div> */}
 
         {/* Divider */}
         {/* <div className="mt-12 w-full max-w-6xl">
@@ -129,7 +127,7 @@ export const Home: React.FC = () => {
         </div> */}
 
         {/* Stats Panel */}
-        <motion.div
+        {/* <motion.div
           className="mt-10 w-full max-w-4xl rounded-2xl  bg-white/20 px-5 py-6 shadow-sm backdrop-blur md:px-8"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,7 +159,7 @@ export const Home: React.FC = () => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </motion.div> */}
 
       </div>
     </div>
@@ -395,9 +393,9 @@ export const Home: React.FC = () => {
     type="certifications"
     logos={[
       { src: '/iso-27001.jpg', alt: 'ISO 27001' },
-      { src: '/9001.png', alt: 'ISO 9001' },
+      // { src: '/9001.png', alt: 'ISO 9001' },
       { src: '/GDPR.png', alt: 'GDPR Compliant' },
-      { src: '/industry.png', alt: 'Industry Partner' },
+      // { src: '/industry.png', alt: 'Industry Partner' },
     ]}
   />
 </Section>
@@ -486,8 +484,14 @@ export const Home: React.FC = () => {
       </Section>
 
       {/* Final CTA Band */}
+      {/* underline decoration-4 underline-offset-8 */}
       <CtaBand
-        headline="Ready to Transform Your IT?"
+headline={
+  <>
+Ready to <span className="text-accent-600 ">Transform</span> Your IT?
+
+  </>
+}
         illustration="/3639351.jpg"
         subheadline="Let's discuss how Tech Line can support your business with fast, reliable IT services and ISO 27001 compliance."
         primaryCTA={{ label: 'Book Your Assessment Now', href: '/contact' }}

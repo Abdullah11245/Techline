@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from './Button';
 
 interface CtaBandProps {
-  headline: string;
+  headline: any;
   subheadline?: string;
   primaryCTA?: {
     label: string;

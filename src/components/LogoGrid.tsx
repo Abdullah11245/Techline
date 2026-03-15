@@ -67,8 +67,8 @@ export const LogoGrid: React.FC<LogoGridProps> = ({
       <motion.div
         className={`grid gap-8 ${
           type === 'certifications'
-            ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-            : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5'
+            ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-2'
+            : 'grid-cols-2 md:grid-cols-2 lg:grid-cols-2'
         } items-center justify-center`}
         variants={container}
         initial="hidden"
@@ -82,10 +82,10 @@ export const LogoGrid: React.FC<LogoGridProps> = ({
               tabIndex={0}
               onClick={() => setActiveLogo(logo)}
               onKeyDown={(e) => e.key === 'Enter' && setActiveLogo(logo)}
-             className="group flex cursor-pointer items-center justify-center p-6 h-32 md:h-40 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"            >
-              <img src={logo.src} alt={logo.alt} className="max-h-20 md:max-h-24 w-auto object-contain grayscale group-hover:grayscale-0 transition duration-300 " />
+             className="group flex cursor-pointer items-center justify-center p-6 h-32 md:h-52 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"            >
+              <img src={logo.src} alt={logo.alt} className="max-h-20 md:max-h-32 w-auto object-contain grayscale group-hover:grayscale-0 transition duration-300 " />
             </div>
-            <p className="text-center text-xs text-gray-600 mt-2 line-clamp-2">{logo.alt}</p>
+            <p className="text-center text-sm text-gray-600 mt-2 line-clamp-2">{logo.alt}</p>
           </motion.div>
         ))}
       </motion.div>

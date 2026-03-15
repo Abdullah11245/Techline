@@ -1,58 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface TypewriterProps {
   text: string;
   speed?: number;
-  deleteSpeed?: number;
-  delay?: number;
   className?: string;
 }
 
 export const Typewriter: React.FC<TypewriterProps> = ({
   text,
-  speed = 100,
-  deleteSpeed = 50,
-  delay = 1500,
-  className = '',
+  speed = 200,
+  className = "",
 }) => {
-  const [displayed, setDisplayed] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | undefined;
+    if (displayed.length >= text.length) return;
 
-    if (!isDeleting && displayed.length < text.length) {
-      // Typing
-      timeout = setTimeout(() => {
-        setDisplayed(text.slice(0, displayed.length + 1));
-      }, speed);
+    const timeout = setTimeout(() => {
+      setDisplayed(text.slice(0, displayed.length + 1));
+    }, speed);
 
-    } else if (!isDeleting && displayed.length === text.length) {
-      // Wait before deleting
-      timeout = setTimeout(() => {
-        setIsDeleting(true);
-      }, delay);
-
-    } else if (isDeleting && displayed.length > 0) {
-      // Deleting
-      timeout = setTimeout(() => {
-        setDisplayed(text.slice(0, displayed.length - 1));
-      }, deleteSpeed);
-
-    } else if (isDeleting && displayed.length === 0) {
-      // Restart typing
-      setIsDeleting(false);
-    }
-
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [displayed, isDeleting, text, speed, deleteSpeed, delay]);
+    return () => clearTimeout(timeout);
+  }, [displayed, text, speed]);
 
   return (
     <span className={className}>
       {displayed}
-      <span className="animate-pulse">|</span>
+      {displayed.length < text.length && (
+        <span className="animate-pulse">|</span>
+      )}
     </span>
   );
 };
