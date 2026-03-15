@@ -317,43 +317,74 @@ export const Home: React.FC = () => {
         </motion.div>
       </Section>
       {/* Decision Tree Section */}
-      <Section id="services" darkBg className="pt-24 md:pt-32">
-        <motion.div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">How Can We Help?</h2>
-          <p className="text-base md:text-xl text-gray-600 max-w-2xl mx-auto">
-            Select your primary need, and we'll guide you to the right solution.
-          </p>
-        </motion.div>
+   <Section id="services" darkBg className="pt-24 md:pt-32">
 
-        <div className="grid md:grid-cols-3 gap-8">
-          <Link to="/services/it-support-infrastructure">
-            <FeatureCard
-              icon={Server}
-              title="Need Ongoing IT Support"
-              description="24/7 helpdesk, infrastructure management, and proactive monitoring. Starting from €299/month."
-              badge="Fast Response"
-            />
-          </Link>
+  {/* Header */}
+  <div className="text-center mb-16">
 
-          <Link to="/services/cyber-security">
-            <FeatureCard
-              icon={Shield}
-              title="Need ISO 27001 Readiness"
-              description="Gap analysis, compliance support, threat protection, and security audits. Expert guidance for certification."
-              badge="ISO Specialist"
-            />
-          </Link>
+    {/* Badge */}
+    <span className="inline-block text-[#004b6a] text-lg font-semibold px-4 py-1 rounded-full ">
+      Our Services
+    </span>
 
-          <Link to="/services/backup-business-continuity">
-            <FeatureCard
-              icon={CheckCircle}
-              title="Need Backup & Recovery"
-              description="Bespoke BCDR planning, managed backups, and rapid recovery solutions. Minimize downtime with RPO/RTO targets."
-              badge="Peace of Mind"
-            />
-          </Link>
-        </div>
-      </Section>
+    {/* Heading */}
+    <motion.h2
+      className="text-3xl md:text-5xl font-bold mb-4 text-[#004b6a]"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    >
+      How Can We Help?
+    </motion.h2>
+
+    {/* Green Divider */}
+    <div className="w-24 h-1 bg-[#40ae49] mx-auto rounded-full mb-6"></div>
+
+    {/* Description */}
+    <motion.p
+      className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ delay: 0.2, duration: 0.6 }}
+      viewport={{ once: true }}
+    >
+      Select your primary need, and we'll guide you to the right solution.
+    </motion.p>
+
+  </div>
+
+  {/* Cards */}
+  <div className="grid md:grid-cols-3 gap-8">
+    <Link to="/services/it-support-infrastructure">
+      <FeatureCard
+        icon={Server}
+        title="Need Ongoing IT Support"
+        description="24/7 helpdesk, infrastructure management, and proactive monitoring. Starting from €299/month."
+        badge="Fast Response"
+      />
+    </Link>
+
+    <Link to="/services/cyber-security">
+      <FeatureCard
+        icon={Shield}
+        title="Need ISO 27001 Readiness"
+        description="Gap analysis, compliance support, threat protection, and security audits. Expert guidance for certification."
+        badge="ISO Specialist"
+      />
+    </Link>
+
+    <Link to="/services/backup-business-continuity">
+      <FeatureCard
+        icon={CheckCircle}
+        title="Need Backup & Recovery"
+        description="Bespoke BCDR planning, managed backups, and rapid recovery solutions. Minimize downtime with RPO/RTO targets."
+        badge="Peace of Mind"
+      />
+    </Link>
+  </div>
+
+</Section>
 
       {/* Certifications & Compliance Section */}
  <Section darkBg={false} className="py-2 pt-12 md:py-24 md:pt-24 bg-white">
