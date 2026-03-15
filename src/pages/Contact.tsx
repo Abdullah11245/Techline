@@ -18,15 +18,25 @@ export const Contact: React.FC = () => {
 
   return (
     <>
-     <Section className="relative overflow-hidden pt-20 md:pt-32 pb-20" noAnimation>
+   <Section className="relative overflow-hidden pt-20 md:pt-32 pb-20" noAnimation>
 
-  {/* Dark Overlay */}
+  {/* ===== Mobile Background Image ===== */}
+  <div className="absolute inset-0 lg:hidden overflow-hidden">
+    <img
+      src="/ai-nuclear.jpg" // same as About page
+      alt="Tech background"
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* ===== Dark Overlay ===== */}
   <div className="absolute inset-0 bg-black/70"></div>
 
   <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
 
-    {/* Image Section */}
-    <div className="grid sm:grid-cols-2 gap-6">
+    {/* ===== Images (Desktop Only) ===== */}
+    <div className="hidden lg:grid sm:grid-cols-2 gap-6">
+      
       <div className="pt-20 flex justify-end sm:justify-center">
         <img
           src="/247.jpg"
@@ -40,11 +50,12 @@ export const Contact: React.FC = () => {
         alt="Team discussion"
         className="rounded-xl object-cover shadow-2xl"
       />
+
     </div>
 
-    {/* Content Section */}
+    {/* ===== Content Section ===== */}
     <motion.div
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-2 md:gap-8"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
@@ -59,33 +70,13 @@ export const Contact: React.FC = () => {
         <Typewriter
           text="Get in Touch"
           speed={100}
-         
-          className="text-2xl md:text-5xl font-bold text-white"
+          className="text-3xl md:text-5xl font-bold text-white"
         />
       </motion.h1>
 
       <p className="text-white/70 text-lg max-w-xl">
         Have questions? Want to schedule an assessment? We're here to help. Fill out the form below and we'll get back to you within 1 business hour.
       </p>
-
-      {/* Optional Glass Stats Card */}
-      {/* <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 flex gap-10 w-fit shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
-        <div>
-          <h3 className="text-4xl font-bold text-white">1h</h3>
-          <p className="text-white/70 text-sm">Response Time</p>
-        </div>
-
-        <div>
-          <h3 className="text-4xl font-bold text-white">100%</h3>
-          <p className="text-white/70 text-sm">Satisfaction</p>
-        </div>
-
-        <div>
-          <h3 className="text-4xl font-bold text-white">24/7</h3>
-          <p className="text-white/70 text-sm">Support</p>
-        </div>
-      </div> */}
-
     </motion.div>
 
   </div>
