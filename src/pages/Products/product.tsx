@@ -51,7 +51,11 @@ const Product = () => {
               key={product._id}
               className="bg-white rounded-lg shadow hover:shadow-lg transition duration-300 aspect-square flex flex-col overflow-hidden"
             >
-              <a href="#" className="flex flex-col h-full">
+             <a
+        href={`/contact?product=${encodeURIComponent(product.title)}`}
+        className="flex flex-col h-full"
+    >
+      {/* Im
                 {/* Image */}
                 <div className="h-2/3 w-full overflow-hidden">
                   <img

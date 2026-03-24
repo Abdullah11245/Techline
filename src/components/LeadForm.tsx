@@ -8,8 +8,11 @@ import emailjs from "@emailjs/browser";
 import.meta.env.VITE_EMAILJS_SERVICE_ID
 import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+interface LeadFormProps {
+  productname?: any; // optional prop
+}
 
-export const LeadForm: React.FC = () => {
+export const LeadForm: React.FC<LeadFormProps> = ( { productname } ) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -267,7 +270,7 @@ export const LeadForm: React.FC = () => {
       </label>
       <textarea
         name="message"
-        value={formData.message}
+  value={formData.message || `I want to ask you about ${productname}`}
         onChange={handleChange}
         className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
           errors.message

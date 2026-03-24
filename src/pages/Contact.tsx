@@ -1,10 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { updateMetaTags } from '@utils/seo';
 import { Section } from '@components/Section';
 import { LeadForm } from '@components/LeadForm';
 import { motion } from 'framer-motion';
 import { Typewriter } from '@/components/TypeWriter';
+import { useLocation } from 'react-router-dom';
 export const Contact: React.FC = () => {
+   const location = useLocation();
+   const params = new URLSearchParams(location.search);
+    const product = params.get('product');
+
+
   useEffect(() => {
     updateMetaTags({
       title: 'Contact Tech Line | Get IT Support Ireland',
@@ -83,7 +89,7 @@ export const Contact: React.FC = () => {
 </Section>
 
       <Section darkBg className="py-24 overflow-x-hidden">
-        <LeadForm />
+        <LeadForm productname={product} />
       </Section>
 
       <Section className="py-24">
