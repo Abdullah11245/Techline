@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { RootLayout } from '@layouts/RootLayout';
 import { Home } from '@pages/Home';
-import { LeadForm } from './pages/Products/Productform';
+import LeadForm from './pages/Products/Productform';
 import Product from './pages/Products/product';
 import CategoryForm from './pages/Products/CategoryForm';
 

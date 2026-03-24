@@ -5,7 +5,7 @@ interface Product {
   title: string;
   description: string;
   image: string;
-  category: string;
+  category: { name: string };
 }
 
 const Product = () => {
@@ -19,6 +19,7 @@ const Product = () => {
         const res = await fetch("http://localhost:5000/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
+        console.log("Fetched products:", data);
         setProducts(data);
       } catch (err: any) {
         setError(err.message || "Unknown error");
@@ -63,7 +64,8 @@ const Product = () => {
                 <div className="p-4 flex flex-col justify-between h-1/4">
                 
                   <p className=" font-semibold text-lg">{product.title}</p>
-                  <p className=" text-gray-600 text-sm">
+                   <p className=" font-semibold text-xs">{product?.category?.name}</p>
+                  <p className=" text-gray-600 text-base mt-2">
                     {truncateDescription(product.description)}
                   </p>
                 </div>
