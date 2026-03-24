@@ -158,6 +158,9 @@ const itemVariants = {
           <Link to="/contact" className={`relative text-md font-medium transition-colors ${isActive('/contact') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/contact') ? 'after:scale-x-100' : ''}`}>
   Contact
 </Link>
+  <Link to="/product" className={`relative text-md font-medium transition-colors ${isActive('/products') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/products') ? 'after:scale-x-100' : ''}`}>
+  Products
+</Link>
           </nav>
 
           {/* Desktop CTA Bar (Sticky) */}
@@ -265,6 +268,9 @@ const itemVariants = {
               >
                 Contact
               </Link>
+               <Link to="/product" className={`relative text-md font-medium transition-colors ${isActive('/products') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/products') ? 'after:scale-x-100' : ''}`}>
+  Products
+</Link>
               
               <div className="border-t border-gray-200 pt-4">
                 <a

@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <img src="/Tech-Line-Logo.webp" alt="Tech Line" className="h-10 mb-4" />
+            <img src="/Techline Logo (BnW).png" alt="Tech Line" className="h-10 mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed">
               IT Support & ISO 27001 Compliance for Irish Businesses. Your one-stop IT services partner.
             </p>

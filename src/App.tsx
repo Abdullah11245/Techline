@@ -2,6 +2,9 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { RootLayout } from '@layouts/RootLayout';
 import { Home } from '@pages/Home';
+import { LeadForm } from './pages/Products/Productform';
+import Product from './pages/Products/product';
+import CategoryForm from './pages/Products/CategoryForm';
 
 // Lazy load service pages for code splitting
 const ItSupport = React.lazy(() => import('@pages/services/ItSupport').then(m => ({ default: m.ItSupport })));
@@ -39,6 +42,9 @@ function App() {
           <Route path="/contact" element={<Suspense fallback={<LoadingFallback />}><Contact /></Suspense>} />
           <Route path="/thank-you" element={<Suspense fallback={<LoadingFallback />}><ThankYou /></Suspense>} />
           <Route path="/privacy" element={<Suspense fallback={<LoadingFallback />}><Privacy /></Suspense>} />
+          <Route path="/productForm" element={<Suspense fallback={<LoadingFallback />}><LeadForm /></Suspense>} />
+          <Route path="/product" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense>} />
+          <Route path="/categoryForm" element={<Suspense fallback={<LoadingFallback />}><CategoryForm /></Suspense>} />
         </Route>
       </Routes>
     </Router>
