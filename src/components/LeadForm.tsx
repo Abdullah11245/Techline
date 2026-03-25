@@ -270,7 +270,7 @@ export const LeadForm: React.FC<LeadFormProps> = ( { productname } ) => {
       </label>
       <textarea
         name="message"
-  value={formData.message || `I want to ask you about ${productname}`}
+  value={productname ? `I want to ask you about ${productname}` : formData.message}
         onChange={handleChange}
         className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
           errors.message

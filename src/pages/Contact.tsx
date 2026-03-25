@@ -45,14 +45,14 @@ export const Contact: React.FC = () => {
       
       <div className="pt-20 flex justify-end sm:justify-center">
         <img
-          src="/247.jpg"
+          src="/contact.jpg"
           alt="Contact team"
           className="rounded-xl object-cover shadow-2xl"
         />
       </div>
 
       <img
-        src="/contactus.png"
+        src="/contactavatar.jpg"
         alt="Team discussion"
         className="rounded-xl object-cover shadow-2xl"
       />

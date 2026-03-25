@@ -73,14 +73,14 @@ const Product = () => {
       
       <div className="pt-20 flex justify-end sm:justify-center">
         <img
-          src="/ai-nuclear.jpg"
+          src="/firewall.jpg"
           alt="Tech team"
           className="rounded-xl object-cover shadow-2xl"
         />
       </div>
 
       <img
-        src="/cybersecurity.jpg"
+        src="/product_service.jpg"
         alt="Tech work"
         className="rounded-xl object-cover shadow-2xl"
       />
