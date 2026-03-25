@@ -19,7 +19,7 @@ React.useEffect(() => {
   const fetchCategories = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/categories");
-      const data = await res.json();
+      const data = await res?.json();
       setCategories(data);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -202,10 +202,10 @@ const itemVariants = {
         animate="visible"
         exit="hidden"
       >
-        {categories.map((cat: any) => (
+        {categories?.map((cat: any) => (
           <motion.div key={cat._id} variants={itemVariants}>
             <Link
-              to={`/products/${cat.slug}`}
+              to={`/products/${cat.name}`}
               className={`block px-4 py-2 text-sm font-medium transition-colors text-black ${navHover}`}
             >
               <span

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface Product {
   _id: string;
@@ -15,15 +16,19 @@ const Product = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const { name } = useParams();
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
-        console.log("Fetched products:", data);
-        setProducts(data);
+        const filtered = data.filter((p: Product) =>
+          // console.log(p.category.name, name?.toLowerCase()) 
+        p.category?.name.toLowerCase() === name?.toLowerCase()
+          );
+          console.log(filtered);
+        setProducts(filtered);
       } catch (err: any) {
         setError(err.message || "Unknown error");
       } finally {
@@ -32,7 +37,7 @@ const Product = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [products, name]);
 
   const truncateDescription = (desc: string, wordLimit = 15) => {
     const words = desc.split(" ");

@@ -43,7 +43,7 @@ function App() {
           <Route path="/thank-you" element={<Suspense fallback={<LoadingFallback />}><ThankYou /></Suspense>} />
           <Route path="/privacy" element={<Suspense fallback={<LoadingFallback />}><Privacy /></Suspense>} />
           <Route path="/productForm" element={<Suspense fallback={<LoadingFallback />}><LeadForm /></Suspense>} />
-          <Route path="/product" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense>} />
+          <Route path="/products/:name" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense>} />
           <Route path="/categoryForm" element={<Suspense fallback={<LoadingFallback />}><CategoryForm /></Suspense>} />
         </Route>
       </Routes>
