@@ -523,7 +523,7 @@ Ready to <span className="text-accent-600 ">Transform</span> Your IT?
 
   </>
 }
-        illustration="/3639351.jpg"
+        illustration="/3.png"
         subheadline="Let's discuss how Tech Line can support your business with fast, reliable IT services and ISO 27001 compliance."
         primaryCTA={{ label: 'Book Your Assessment Now', href: '/contact' }}
         secondaryCTA={{ label: 'Call Us Today', href: 'tel:+353' }}

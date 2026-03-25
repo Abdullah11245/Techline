@@ -254,7 +254,7 @@ export const Telecom: React.FC = () => {
       <CtaBand
         headline="Upgrade to Cloud Telephony"
         subheadline="Modern communication systems that scale with your business and keep you connected anywhere."
-        illustration="/5092143.jpg"
+        illustration="/4.png"
         primaryCTA={{ label: 'Schedule Demo', href: '/contact' }}
       />
     </>

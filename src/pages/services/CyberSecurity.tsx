@@ -396,7 +396,7 @@ export const CyberSecurity: React.FC = () => {
       <CtaBand
         headline="Secure Your Business & Achieve ISO 27001 Compliance"
         subheadline="Talk to our security experts about protecting your organization and gaining competitive advantage."
-        illustration="/20945658.jpg"
+        illustration="/7.png"
         primaryCTA={{ label: 'Schedule Security Assessment', href: '/contact' }}
         secondaryCTA={{ label: 'Call Our Security Team', href: 'tel:+353' }}
       />

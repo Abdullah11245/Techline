@@ -310,7 +310,7 @@ export const DigitalServices: React.FC = () => {
       <CtaBand
         headline="Transform Your Digital Presence"
         subheadline="Professional web development and marketing services to grow your Irish business online."
-        illustration="/3289499.jpg"
+        illustration="/1.png"
         primaryCTA={{ label: 'Get a Quote', href: '/contact' }}
       />
     </>

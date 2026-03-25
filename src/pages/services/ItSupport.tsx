@@ -247,7 +247,7 @@ export const ItSupport: React.FC = () => {
       <CtaBand
         headline="Ready to Upgrade Your IT Support?"
         subheadline="Let's discuss your business needs and find the right support level for you."
-         illustration='/7758839.jpg'
+         illustration='/6.png'
         primaryCTA={{ label: 'Get Started', href: '/contact' }}
         secondaryCTA={{ label: 'Request a Call', href: 'tel:+353' }}
       />

@@ -261,7 +261,7 @@ export const Microsoft365: React.FC = () => {
       <CtaBand
         headline="Empower Your Team with Microsoft 365"
         subheadline="Transform collaboration and productivity with cloud-based tools tailored to your organization."
-         illustration="/50426.jpg"
+         illustration="/2.png"
         primaryCTA={{ label: 'Talk to Us', href: '/contact' }}
       />
     </>
