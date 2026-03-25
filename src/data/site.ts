@@ -3,7 +3,7 @@ export const siteConfig = {
   title: 'IT Support & ISO 27001 Compliance for Irish Businesses',
   description: 'Complete IT services, cybersecurity, and cloud solutions for Irish enterprises',
   url: 'https://tline.ie',
-  phone: '+353 (0)XX XXX XXXX',
+  phone: '(065) 682 7229',
   email: 'info@tline.ie',
   serviceArea: 'Ireland',
   socialLinks: {
