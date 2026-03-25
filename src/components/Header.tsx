@@ -13,6 +13,21 @@ export const Header: React.FC = () => {
    const closeTimeoutRef = useRef(null) as any;
   const [isMobile, setIsMobile] = useState(false);
   const effectiveScrolled = isMobile ? true : isScrolled;
+  const [productsOpen, setProductsOpen] = useState(false);
+const [categories, setCategories] = useState([]);
+React.useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/categories");
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      console.error("Failed to fetch categories", err);
+    }
+  };
+
+  fetchCategories();
+}, []);
 
 React.useEffect(() => {
   const handleResize = () => {
@@ -158,9 +173,58 @@ const itemVariants = {
           <Link to="/contact" className={`relative text-md font-medium transition-colors ${isActive('/contact') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/contact') ? 'after:scale-x-100' : ''}`}>
   Contact
 </Link>
-  <Link to="/product" className={`relative text-md font-medium transition-colors ${isActive('/products') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/products') ? 'after:scale-x-100' : ''}`}>
-  Products
-</Link>
+<div
+  className="relative"
+  onMouseEnter={() => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    setProductsOpen(true);
+  }}
+  onMouseLeave={() => {
+    closeTimeoutRef.current = setTimeout(() => setProductsOpen(false), 700);
+  }}
+>
+  <button className={`flex items-center gap-1 text-md font-medium ${navText} ${navHover} transition-colors`}>
+    Products
+    <ChevronDown className="w-5 h-5 pt-1" />
+  </button>
+
+  {productsOpen && (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 overflow-hidden"
+    >
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+      >
+        {categories.map((cat: any) => (
+          <motion.div key={cat._id} variants={itemVariants}>
+            <Link
+              to={`/products/${cat.slug}`}
+              className={`block px-4 py-2 text-sm font-medium transition-colors text-black ${navHover}`}
+            >
+              <span
+                className={`relative
+                  after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full
+                  after:origin-left after:scale-x-0 after:bg-green-500
+                  after:transition-transform after:duration-500 after:ease-out
+                  hover:after:scale-x-100
+                `}
+              >
+                {cat.name}
+              </span>
+            </Link>
+          </motion.div>
+        ))}
+      </motion.div>
+    </motion.div>
+  )}
+</div>
           </nav>
 
           {/* Desktop CTA Bar (Sticky) */}
@@ -268,9 +332,29 @@ const itemVariants = {
               >
                 Contact
               </Link>
-               <Link to="/product" className={`relative text-md font-medium transition-colors ${isActive('/products') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/products') ? 'after:scale-x-100' : ''}`}>
-  Products
-</Link>
+              <div>
+  <button
+    onClick={() => setProductsOpen(!productsOpen)}
+    className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-900 font-medium transition-colors"
+  >
+    Products
+    <ChevronDown className={`w-4 h-4 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
+  </button>
+
+  {productsOpen && (
+    <div className="ml-4 mt-2 space-y-2">
+      {categories.map((cat: any) => (
+        <Link
+          key={cat._id}
+          to={`/products/${cat.slug}`}
+          className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
+        >
+          {cat.name}
+        </Link>
+      ))}
+    </div>
+  )}
+</div>
               
               <div className="border-t border-gray-200 pt-4">
                 <a
