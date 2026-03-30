@@ -173,6 +173,8 @@ const itemVariants = {
           <Link to="/contact" className={`relative text-md font-medium transition-colors ${isActive('/contact') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/contact') ? 'after:scale-x-100' : ''}`}>
   Contact
 </Link>
+
+<Link to="/productForm">Products</Link>
 <div
   className="relative"
   onMouseEnter={() => {
@@ -225,6 +227,7 @@ const itemVariants = {
     </motion.div>
   )}
 </div>
+
           </nav>
 
           {/* Desktop CTA Bar (Sticky) */}
