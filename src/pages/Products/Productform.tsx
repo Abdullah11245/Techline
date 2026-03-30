@@ -265,7 +265,7 @@ const ProductForm = () => {
             name="subcategory"
             value={formData.subcategory}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition mb-6"
           >
             <option value="">Select Subcategory (or type below)</option>
             {selectedCategory.subcategories.map((sub, idx) => (
