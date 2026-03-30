@@ -32,7 +32,7 @@ const ProductForm = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/categories");
+        const res = await fetch("https://techline-backend-1.onrender.com/api/categories");
         const data = await res.json();
         setCategories(data);
       } catch (err) {
@@ -65,7 +65,7 @@ const ProductForm = () => {
       data.append("subcategory", newSubcategory || formData.subcategory);
       data.append("image", file);
 
-      const res = await fetch("http://localhost:5000/api/products", {
+      const res = await fetch("https://techline-backend-1.onrender.com/api/products", {
         method: "POST",
         body: data
       });

@@ -20,7 +20,7 @@ const Product = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/products");
+        const res = await fetch("https://techline-backend-1.onrender.com/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
         const filtered = data.filter((p: Product) =>

@@ -32,7 +32,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:5000/api/categories", {
+      const res = await fetch("https://techline-backend-1.onrender.com/api/categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
