@@ -107,7 +107,7 @@ const ProductsManager: React.FC = () => {
   if (loading) return <div className="text-center py-10">Loading products...</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-4">
+    <div className="min-h-screen bg-slate-50 py-16 px-4 mt-24">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Manage Products</h1>
         <p className="text-gray-600 mb-8">Edit product titles and descriptions. Categories cannot be changed.</p>

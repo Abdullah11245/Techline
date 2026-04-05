@@ -6,7 +6,7 @@ const AdminDashboard: React.FC = () => {
   const { adminEmail, logout } = useAuth();
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-4">
+    <div className="min-h-screen bg-slate-50 py-16 px-4 mt-24">
       <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-3xl shadow-xl p-8">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
