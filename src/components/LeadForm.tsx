@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from './Button';
-import { submitContactForm } from '@utils/form';
 import { services } from '@data/services';
 import emailjs from "@emailjs/browser";
 import.meta.env.VITE_EMAILJS_SERVICE_ID
 import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 interface LeadFormProps {
-  productname?: any; // optional prop
+  productname?: string;
 }
 
-export const LeadForm: React.FC<LeadFormProps> = ( { productname } ) => {
+export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -20,11 +19,20 @@ export const LeadForm: React.FC<LeadFormProps> = ( { productname } ) => {
     email: '',
     phone: '',
     service: 'it-support',
-    message: '',
+    message: productname ? `I want to ask you about ${productname}` : '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+
+  React.useEffect(() => {
+    if (productname && !formData.message) {
+      setFormData((prev) => ({
+        ...prev,
+        message: `I want to ask you about ${productname}`,
+      }));
+    }
+  }, [productname]);
  
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -270,7 +278,7 @@ export const LeadForm: React.FC<LeadFormProps> = ( { productname } ) => {
       </label>
       <textarea
         name="message"
-  value={productname ? `I want to ask you about ${productname}` : formData.message}
+        value={formData.message}
         onChange={handleChange}
         className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
           errors.message
