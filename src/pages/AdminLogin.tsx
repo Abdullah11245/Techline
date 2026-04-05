@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { API_BASE_URL } from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
 
@@ -82,6 +82,13 @@ const AdminLogin: React.FC = () => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link to="/admin/register" className="font-semibold text-primary-600 hover:text-primary-700">
+            Sign up here
+          </Link>
+        </p>
       </div>
     </div>
   );

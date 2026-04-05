@@ -8,6 +8,7 @@ import CategoryForm from './pages/Products/CategoryForm';
 import { AuthProvider } from '@/context/AuthContext';
 import RequireAuth from '@/components/RequireAuth';
 const AdminLogin = React.lazy(() => import('@pages/AdminLogin'));
+const AdminRegister = React.lazy(() => import('@pages/AdminRegister').then(m => ({ default: m.AdminRegister })));
 const AdminDashboard = React.lazy(() => import('@pages/AdminDashboard'));
 const ProductsManager = React.lazy(() => import('@pages/ProductsManager'));
 const CategoriesManager = React.lazy(() => import('@pages/CategoriesManager'));
@@ -50,6 +51,7 @@ function App() {
           <Route path="/thank-you" element={<Suspense fallback={<LoadingFallback />}><ThankYou /></Suspense>} />
           <Route path="/privacy" element={<Suspense fallback={<LoadingFallback />}><Privacy /></Suspense>} />
           <Route path="/admin/login" element={<Suspense fallback={<LoadingFallback />}><AdminLogin /></Suspense>} />
+          <Route path="/admin/register" element={<Suspense fallback={<LoadingFallback />}><AdminRegister /></Suspense>} />
           <Route path="/admin/dashboard" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><AdminDashboard /></Suspense></RequireAuth>} />
           <Route path="/admin/products" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><ProductsManager /></Suspense></RequireAuth>} />
           <Route path="/admin/categories" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><CategoriesManager /></Suspense></RequireAuth>} />
