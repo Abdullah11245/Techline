@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { buildUrl } from '@/utils/api';
 
 interface Product {
   _id: string;
@@ -20,14 +21,12 @@ const Product = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://techline-backend-1.onrender.com/api/products");
+        const res = await fetch(buildUrl('/api/products'));
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
         const filtered = data.filter((p: Product) =>
-          // console.log(p.category.name, name?.toLowerCase()) 
-        p.category?.name.toLowerCase() === name?.toLowerCase()
-          );
-          console.log(filtered);
+          p.category?.name.toLowerCase() === name?.toLowerCase()
+        );
         setProducts(filtered);
       } catch (err: any) {
         setError(err.message || "Unknown error");
@@ -37,7 +36,7 @@ const Product = () => {
     };
 
     fetchProducts();
-  }, [products, name]);
+  }, [name]);
 
   const truncateDescription = (desc: string, wordLimit = 15) => {
     const words = desc.split(" ");

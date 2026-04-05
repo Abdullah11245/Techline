@@ -5,6 +5,12 @@ import { Home } from '@pages/Home';
 import LeadForm from './pages/Products/Productform';
 import Product from './pages/Products/product';
 import CategoryForm from './pages/Products/CategoryForm';
+import { AuthProvider } from '@/context/AuthContext';
+import RequireAuth from '@/components/RequireAuth';
+const AdminLogin = React.lazy(() => import('@pages/AdminLogin'));
+const AdminDashboard = React.lazy(() => import('@pages/AdminDashboard'));
+const ProductsManager = React.lazy(() => import('@pages/ProductsManager'));
+const CategoriesManager = React.lazy(() => import('@pages/CategoriesManager'));
 
 // Lazy load service pages for code splitting
 const ItSupport = React.lazy(() => import('@pages/services/ItSupport').then(m => ({ default: m.ItSupport })));
@@ -29,8 +35,9 @@ const LoadingFallback = () => (
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route element={<RootLayout />}>
+      <AuthProvider>
+        <Routes>
+          <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/services/it-support-infrastructure" element={<Suspense fallback={<LoadingFallback />}><ItSupport /></Suspense>} />
           <Route path="/services/cyber-security" element={<Suspense fallback={<LoadingFallback />}><CyberSecurity /></Suspense>} />
@@ -42,11 +49,16 @@ function App() {
           <Route path="/contact" element={<Suspense fallback={<LoadingFallback />}><Contact /></Suspense>} />
           <Route path="/thank-you" element={<Suspense fallback={<LoadingFallback />}><ThankYou /></Suspense>} />
           <Route path="/privacy" element={<Suspense fallback={<LoadingFallback />}><Privacy /></Suspense>} />
-          <Route path="/productForm" element={<Suspense fallback={<LoadingFallback />}><LeadForm /></Suspense>} />
+          <Route path="/admin/login" element={<Suspense fallback={<LoadingFallback />}><AdminLogin /></Suspense>} />
+          <Route path="/admin/dashboard" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><AdminDashboard /></Suspense></RequireAuth>} />
+          <Route path="/admin/products" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><ProductsManager /></Suspense></RequireAuth>} />
+          <Route path="/admin/categories" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><CategoriesManager /></Suspense></RequireAuth>} />
+          <Route path="/productForm" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><LeadForm /></Suspense></RequireAuth>} />
           <Route path="/products/:name" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense>} />
-          <Route path="/categoryForm" element={<Suspense fallback={<LoadingFallback />}><CategoryForm /></Suspense>} />
+          <Route path="/categoryForm" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><CategoryForm /></Suspense></RequireAuth>} />
         </Route>
       </Routes>
+    </AuthProvider>
     </Router>
   );
 }

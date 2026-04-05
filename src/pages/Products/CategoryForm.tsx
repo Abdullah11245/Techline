@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { authenticatedFetch } from '@/utils/api';
 
 interface CategoryFormProps {
   onSuccess?: () => void;
@@ -32,7 +33,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
     setError(null);
 
     try {
-      const res = await fetch("https://techline-backend-1.onrender.com/api/categories", {
+      const res = await authenticatedFetch('/api/categories', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

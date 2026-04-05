@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Section } from '@components/Section';
 import { Typewriter } from '@/components/TypeWriter';
+import { authenticatedFetch, buildUrl } from '@/utils/api';
 interface Category {
   _id: string;
   name: string;
@@ -32,7 +33,7 @@ const ProductForm = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://techline-backend-1.onrender.com/api/categories");
+        const res = await fetch(buildUrl('/api/categories'));
         const data = await res.json();
         setCategories(data);
       } catch (err) {
@@ -65,9 +66,9 @@ const ProductForm = () => {
       data.append("subcategory", newSubcategory || formData.subcategory);
       data.append("image", file);
 
-      const res = await fetch("https://techline-backend-1.onrender.com/api/products", {
+      const res = await authenticatedFetch('/api/products', {
         method: "POST",
-        body: data
+        body: data,
       });
       if (!res.ok) throw new Error("Failed to upload product");
 

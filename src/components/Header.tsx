@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Menu, X, Phone, ChevronDown } from 'lucide-react';
 import { Button } from './Button';
 import { siteConfig } from '@data/site';
+import { useAuth } from '@/context/AuthContext';
+import { API_BASE_URL } from '@/utils/api';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,8 +20,8 @@ const [categories, setCategories] = useState([]);
 React.useEffect(() => {
   const fetchCategories = async () => {
     try {
-      const res = await fetch("https://techline-backend-1.onrender.com/api/categories");
-      const data = await res?.json();
+      const res = await fetch(`${API_BASE_URL}/api/categories`);
+      const data = await res.json();
       setCategories(data);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -48,6 +50,7 @@ React.useEffect(() => {
     { to: "/services/digital-services", label: "Digital Services" },
   ];
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 const containerVariants = {
   hidden: {},
   visible: {
@@ -121,6 +124,7 @@ const itemVariants = {
       onMouseEnter={() => {
         if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
         setServicesOpen(true);
+        setProductsOpen(false);
       }}
       onMouseLeave={() => {
         closeTimeoutRef.current = setTimeout(() => setServicesOpen(false), 700);
@@ -174,12 +178,39 @@ const itemVariants = {
   Contact
 </Link>
 
+          {isAuthenticated ? (
+            <Link
+              to="/admin/dashboard"
+              className={`relative text-md font-medium transition-colors ${isActive('/admin/dashboard') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/admin/dashboard') ? 'after:scale-x-100' : ''}`}
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/admin/login"
+              className={`relative text-md font-medium transition-colors ${isActive('/admin/login') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/admin/login') ? 'after:scale-x-100' : ''}`}
+            >
+              Admin
+            </Link>
+          )}
+
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => logout()}
+              className="relative text-md font-medium transition-colors text-red-600 hover:text-red-700"
+            >
+              Logout
+            </button>
+          )}
+
 {/* <Link to="/productForm">Products</Link> */}
 <div
   className="relative"
   onMouseEnter={() => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setProductsOpen(true);
+    setServicesOpen(false);
   }}
   onMouseLeave={() => {
     closeTimeoutRef.current = setTimeout(() => setProductsOpen(false), 700);
@@ -281,7 +312,10 @@ const itemVariants = {
               {/* Services Submenu */}
               <div>
                 <button
-                  onClick={() => setServicesOpen(!servicesOpen)}
+                  onClick={() => {
+                    setServicesOpen(!servicesOpen);
+                    if (!servicesOpen) setProductsOpen(false);
+                  }}
                   className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-900 font-medium transition-colors"
                 >
                   Services
@@ -335,9 +369,30 @@ const itemVariants = {
               >
                 Contact
               </Link>
+              <Link
+                to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}
+                className="block px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-900 font-medium transition-colors"
+              >
+                {isAuthenticated ? 'Dashboard' : 'Admin'}
+              </Link>
+              {isAuthenticated && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 text-red-600 font-medium transition-colors"
+                >
+                  Logout
+                </button>
+              )}
               <div>
   <button
-    onClick={() => setProductsOpen(!productsOpen)}
+    onClick={() => {
+      setProductsOpen(!productsOpen);
+      if (!productsOpen) setServicesOpen(false);
+    }}
     className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-900 font-medium transition-colors"
   >
     Products
@@ -349,7 +404,7 @@ const itemVariants = {
       {categories.map((cat: any) => (
         <Link
           key={cat._id}
-          to={`/products/${cat.slug}`}
+          to={`/products/${cat.name}`}
           className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
         >
           {cat.name}
