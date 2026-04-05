@@ -8,7 +8,7 @@ import.meta.env.VITE_EMAILJS_SERVICE_ID
 import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 interface LeadFormProps {
-  productname?: string;
+  productname?: string | null;
 }
 
 export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
@@ -21,6 +21,10 @@ export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
     service: 'it-support',
     message: productname ? `I want to ask you about ${productname}` : '',
   });
+
+  const emailJsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+  const emailJsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+  const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -65,8 +69,8 @@ export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
 
   try {
     const response = await emailjs.send(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      emailJsServiceId,
+      emailJsTemplateId,
       {
         name: formData.name,
         company: formData.company,
@@ -75,7 +79,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
         service: formData.service,
         message: formData.message,
       },
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      emailJsPublicKey
     );
 
     if (response.status === 200) {

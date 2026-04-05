@@ -89,7 +89,7 @@ export const Contact: React.FC = () => {
 </Section>
 
       <Section darkBg className="py-24 overflow-x-hidden">
-        <LeadForm productname={product} />
+        <LeadForm productname={product ?? undefined} />
       </Section>
 
       <Section className="py-24">
