@@ -174,31 +174,11 @@ const itemVariants = {
       )}
     </div>
 
-          <Link to="/contact" className={`relative text-md font-medium transition-colors ${isActive('/contact') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/contact') ? 'after:scale-x-100' : ''}`}>
-  Contact
-</Link>
-
-          {isAuthenticated ? (
-            <Link
-              to="/admin/dashboard"
-              className={`relative text-md font-medium transition-colors ${isActive('/admin/dashboard') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/admin/dashboard') ? 'after:scale-x-100' : ''}`}
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <Link
-              to="/admin/login"
-              className={`relative text-md font-medium transition-colors ${isActive('/admin/login') ? 'text-primary-600' : `${navText} ${navHover}`} after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-300 hover:after:scale-x-100 ${isActive('/admin/login') ? 'after:scale-x-100' : ''}`}
-            >
-              Admin
-            </Link>
-          )}
-
           {isAuthenticated && (
             <button
               type="button"
               onClick={() => logout()}
-              className="relative text-md font-medium transition-colors text-red-600 hover:text-red-700"
+              className={`relative text-md font-medium transition-colors ${navText} ${navHover}`}
             >
               Logout
             </button>
