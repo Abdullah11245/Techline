@@ -41,9 +41,9 @@ export const footerLinks = [
   {
     title: 'Contact',
     links: [
-      { label: 'Phone', href: 'tel:+353xxx' },
-      { label: 'Email', href: 'mailto:info@tline.ie' },
-      { label: 'Service Area: Ireland', href: '#' },
+      { label: 'Phone : (065) 682 7229', href: '' },
+      { label: 'Email : info@tline.ie', href: '' },
+      // { label: 'Service Area: Ireland', href: '#' },
     ],
   },
 ];

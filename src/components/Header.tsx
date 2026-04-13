@@ -174,7 +174,7 @@ const itemVariants = {
       )}
     </div>
 
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <button
               type="button"
               onClick={() => logout()}
@@ -182,7 +182,7 @@ const itemVariants = {
             >
               Logout
             </button>
-          )}
+          )} */}
 
 {/* <Link to="/productForm">Products</Link> */}
 <div
@@ -242,7 +242,7 @@ const itemVariants = {
           </nav>
 
           {/* Desktop CTA Bar (Sticky) */}
-<div className="hidden md:flex items-center gap-4">
+{/* <div className="hidden md:flex items-center gap-4">
   <a
     href={`tel:${siteConfig.phone}`}
     className="group flex flex-col items-start justify-center px-5 py-3 rounded-xl bg-accent-600 text-white transition-transform duration-300 hover:scale-105 hover:shadow-lg"
@@ -255,8 +255,34 @@ const itemVariants = {
       </div>
     </div>
   </a>
+</div> */}
+<div className="hidden md:flex items-center gap-4">
+  {isAuthenticated ? (
+    <button
+      onClick={logout}
+      className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#111827] text-white transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+    >
+      <span className="text-sm font-semibold">Logout</span>
+    </button>
+  ) : (
+    <a
+      href={`tel:${siteConfig.phone}`}
+      className="group flex flex-col items-start justify-center px-5 py-3 rounded-xl bg-accent-600 text-white transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+    >
+      <div className="flex items-center gap-3">
+        <Phone className="w-5 h-5 text-white" />
+        <div className="flex flex-col leading-tight">
+          <span className="text-xs font-medium uppercase opacity-90">
+            Contact Now
+          </span>
+          <span className="text-sm font-semibold">
+            {siteConfig.phone}
+          </span>
+        </div>
+      </div>
+    </a>
+  )}
 </div>
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors text-black mr-2 bg-white/40"
