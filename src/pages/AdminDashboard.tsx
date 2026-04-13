@@ -66,7 +66,7 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="mt-10 rounded-3xl bg-primary-600 p-8 text-white">
-          <h2 className="text-2xl font-semibold">Protected admin routes</h2>
+          <h2 className="text-2xl font-semibold text-white">Protected admin routes</h2>
           <p className="mt-3 text-sm leading-7">
             Only authenticated admin users can access these pages and submit changes. If you want to change backend
             servers, update <code className="rounded bg-slate-900 px-2 py-1 text-xs">VITE_API_BASE_URL</code> in your
