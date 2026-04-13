@@ -87,7 +87,7 @@ export const Contact: React.FC = () => {
   </div>
 </Section>
 
-      <Section darkBg className="py-24 overflow-x-hidden relative">
+      <Section darkBg className="py-24 overflow-hidden relative">
          <div className="absolute inset-0 pointer-events-none z-0">
             {[...Array(35)].map((_, i) => {
               const sizes = [40, 50, 60, 70];
