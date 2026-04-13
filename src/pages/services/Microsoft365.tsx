@@ -17,6 +17,8 @@ export const Microsoft365: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/microsoft-365-collaboration',
     });
+        localStorage.setItem('lastVisitedService', service.title);
+
   }, []);
 
   return (

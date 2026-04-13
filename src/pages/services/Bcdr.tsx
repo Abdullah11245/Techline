@@ -19,6 +19,8 @@ export const Bcdr: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/backup-business-continuity',
     });
+      localStorage.setItem('lastVisitedService', service.title);
+
   }, []);
 
   const data = {

@@ -17,6 +17,8 @@ export const DigitalServices: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/digital-services',
     });
+    localStorage.setItem('lastVisitedService', service.title);
+
   }, []);
 
   return (

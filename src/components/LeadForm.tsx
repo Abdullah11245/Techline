@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from './Button';
@@ -28,7 +28,32 @@ export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  // const [lastVisitedPage, setLastVisitedPage] = useState<string | null>(null);
 
+useEffect(() => {
+  const lastPage = localStorage.getItem('lastVisitedService');
+  console.log("Last visited page from localStorage:", lastPage);
+
+  if (!lastPage) return;
+
+  // setLastVisitedPage(lastPage);
+
+ const matchedService = Object.values(services).find((service) =>
+  lastPage.toLowerCase().includes(service.title.toLowerCase())
+);
+console.log("Matched service based on last visited page:", matchedService);
+  if (matchedService) {
+    setFormData((prev) => {
+      // prevent unnecessary re-render
+      if (prev.service === matchedService.id) return prev;
+
+      return {
+        ...prev,
+        service: matchedService.id,
+      };
+    });
+  }
+}, [services]); // 👈 important
   React.useEffect(() => {
     if (productname && !formData.message) {
       setFormData((prev) => ({

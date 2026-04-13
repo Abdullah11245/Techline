@@ -21,6 +21,8 @@ export const ItSupport: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/it-support-infrastructure',
     });
+      localStorage.setItem('lastVisitedService', service.title);
+
   }, []);
 
   return (

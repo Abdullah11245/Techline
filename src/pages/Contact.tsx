@@ -9,7 +9,7 @@ export const Contact: React.FC = () => {
    const location = useLocation();
    const params = new URLSearchParams(location.search);
     const product = params.get('product');
-
+   
 
   useEffect(() => {
     updateMetaTags({
@@ -17,7 +17,6 @@ export const Contact: React.FC = () => {
       description: 'Contact Tech Line for IT support, cybersecurity, and cloud solutions. Book a 15-minute assessment or call us directly.',
       url: 'https://tline.ie/contact',
     });
-
     // Scroll to form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);

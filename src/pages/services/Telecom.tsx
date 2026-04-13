@@ -17,6 +17,7 @@ export const Telecom: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/telecom-cloud-telephony',
     });
+    localStorage.setItem('lastVisitedService', service.title);
   }, []);
 
   return (

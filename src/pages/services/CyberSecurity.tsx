@@ -19,6 +19,8 @@ export const CyberSecurity: React.FC = () => {
       description: service.description,
       url: 'https://tline.ie/services/cyber-security',
     });
+    localStorage.setItem('lastVisitedService', service.title);
+
   }, []);
 
   const categories = [
