@@ -110,36 +110,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({ productname }) => {
   return (
   <div className="relative max-w-2xl mx-auto py-24">
   {/* ===== Animated Background Squares ===== */}
-  <div className="absolute inset-0 pointer-events-none z-0">
-    {[...Array(35)].map((_, i) => {
-      const sizes = [40, 50, 60, 70];
-      const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
-      const randomTop = Math.floor(Math.random() * 100);
-      const randomLeft = Math.floor(Math.random() * 100);
-      const duration = 25 + Math.random() * 20;
-
-      return (
-        <div
-          key={i}
-          className="absolute rounded-xl 
-            bg-gradient-to-r 
-            from-[#004b6a]/20 
-            via-[#004b6a]/40 
-            to-[#004b6a]/20 
-            p-[1px] opacity-20"
-          style={{
-            width: `${randomSize}px`,
-            height: `${randomSize}px`,
-            top: `${randomTop}%`,
-            left: `${randomLeft}%`,
-            animation: `spin ${duration}s linear infinite`,
-          }}
-        >
-          <div className="w-full h-full rounded-xl bg-transparent"></div>
-        </div>
-      );
-    })}
-  </div>
+ 
 
   {/* ===== The Form ===== */}
   <motion.form
