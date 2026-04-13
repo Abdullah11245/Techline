@@ -32,10 +32,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    setIsLoading(true)
     setToken(null);
     setAdminEmail(null);
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminEmail');
+    setTimeout(() => setIsLoading(false), 2000); // Simulate logout delay for better UX
   };
 
   const value = useMemo(

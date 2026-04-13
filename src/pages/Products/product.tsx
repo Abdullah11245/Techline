@@ -12,31 +12,37 @@ interface Product {
 import { motion } from 'framer-motion';
 import { Section } from '@components/Section';
 import { Typewriter } from '@/components/TypeWriter';
+import Loader from "@/components/Loader/Loader";
 
 const Product = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { name } = useParams();
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(buildUrl('/api/products'));
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const data = await res.json();
-        const filtered = data.filter((p: Product) =>
-          p.category?.name.toLowerCase() === name?.toLowerCase()
-        );
-        setProducts(filtered);
-      } catch (err: any) {
-        setError(err.message || "Unknown error");
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchProducts = async () => {
+    setLoading(true); // ✅ ADD THIS LINE
 
-    fetchProducts();
-  }, [name]);
+    try {
+      const res = await fetch(buildUrl('/api/products'));
+      if (!res.ok) throw new Error("Failed to fetch products");
+
+      const data = await res.json();
+
+      const filtered = data.filter((p: Product) =>
+        p.category?.name.toLowerCase() === name?.toLowerCase()
+      );
+
+      setProducts(filtered);
+    } catch (err: any) {
+      setError(err.message || "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, [name]);
 
   const truncateDescription = (desc: string, wordLimit = 15) => {
     const words = desc.split(" ");
@@ -45,8 +51,8 @@ const Product = () => {
       : desc;
   };
 
-  if (loading) return <p className="text-center py-10">Loading products...</p>;
-  if (error) return <p className="text-center py-10 text-red-600">{error}</p>;
+  if (loading) return <Loader/>;
+  if (error) return <p className="text-center py-10 text-red-600 h-screen w-screen">{error}</p>;
 
   return (
     

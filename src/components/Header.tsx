@@ -12,11 +12,11 @@ export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-   const closeTimeoutRef = useRef(null) as any;
+  const closeTimeoutRef = useRef(null) as any;
   const [isMobile, setIsMobile] = useState(false);
   const effectiveScrolled = isMobile ? true : isScrolled;
   const [productsOpen, setProductsOpen] = useState(false);
-const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 React.useEffect(() => {
   const fetchCategories = async () => {
     try {

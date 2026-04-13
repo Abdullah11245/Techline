@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import Loader from './Loader/Loader';
 
 interface RequireAuthProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return <Loader/>;
   }
   
   if (!isAuthenticated) {
