@@ -143,7 +143,7 @@ export const Contact: React.FC = () => {
             >
               <h3 className="font-bold text-gray-900 mb-2">Phone</h3>
               <a href="tel:+353" className="text-primary-600 font-semibold hover:text-primary-700">
-                +353 (0)XX XXX XXXX
+                (065) 682 7229
               </a>
               <p className="text-sm text-gray-600 mt-2">Available 24/7 for premium clients</p>
             </motion.div>
@@ -169,7 +169,7 @@ export const Contact: React.FC = () => {
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <h3 className="font-bold text-gray-900 mb-2">Service Area</h3>
+              <h3 className="font-bold text-gray-900 mb-2"> Area</h3>
               <p className="text-gray-700 font-semibold">Ireland</p>
               <p className="text-sm text-gray-600 mt-2">Supporting businesses nationwide</p>
             </motion.div>

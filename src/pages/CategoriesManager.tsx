@@ -3,6 +3,7 @@ import { authenticatedFetch, buildUrl } from '@/utils/api';
 
 interface Subcategory {
   name: string;
+  subSubcategories?: { name: string }[];
 }
 
 interface Category {
@@ -36,7 +37,13 @@ const CategoriesManager: React.FC = () => {
 
   const handleEdit = (category: Category) => {
     setEditingId(category._id);
-    setEditData({ name: category.name, subcategories: category.subcategories });
+    setEditData({
+      name: category.name,
+      subcategories: category.subcategories.map((sub) => ({
+        name: sub.name,
+        subSubcategories: sub.subSubcategories || [],
+      })),
+    });
   };
 
   const handleSave = async () => {
@@ -70,7 +77,7 @@ const CategoriesManager: React.FC = () => {
     if (!editData) return;
     setEditData({
       ...editData,
-      subcategories: [...editData.subcategories, { name: '' }],
+      subcategories: [...editData.subcategories, { name: '', subSubcategories: [] }],
     });
   };
 
@@ -89,13 +96,41 @@ const CategoriesManager: React.FC = () => {
     setEditData({ ...editData, subcategories: updated });
   };
 
+  const handleAddSubSubcategory = (subcategoryIndex: number) => {
+    if (!editData) return;
+    const updated = [...editData.subcategories];
+    updated[subcategoryIndex].subSubcategories = [
+      ...(updated[subcategoryIndex].subSubcategories || []),
+      { name: '' },
+    ];
+    setEditData({ ...editData, subcategories: updated });
+  };
+
+  const handleRemoveSubSubcategory = (subcategoryIndex: number, subSubcategoryIndex: number) => {
+    if (!editData) return;
+    const updated = [...editData.subcategories];
+    updated[subcategoryIndex].subSubcategories = (updated[subcategoryIndex].subSubcategories || []).filter(
+      (_, i) => i !== subSubcategoryIndex
+    );
+    setEditData({ ...editData, subcategories: updated });
+  };
+
+  const handleSubSubcategoryChange = (subcategoryIndex: number, subSubcategoryIndex: number, name: string) => {
+    if (!editData) return;
+    const updated = [...editData.subcategories];
+    const subSubs = [...(updated[subcategoryIndex].subSubcategories || [])];
+    subSubs[subSubcategoryIndex] = { name };
+    updated[subcategoryIndex].subSubcategories = subSubs;
+    setEditData({ ...editData, subcategories: updated });
+  };
+
   if (loading) return <div className="text-center py-10">Loading categories...</div>;
 
   return (
     <div className="min-h-screen bg-slate-50 py-16 px-4 mt-24">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Manage Categories</h1>
-        <p className="text-gray-600 mb-8">Edit category names and subcategories. Deletion is disabled.</p>
+        <p className="text-gray-600 mb-8">Edit category names, subcategories, and sub subcategories. Deletion is disabled.</p>
 
         {/* Table */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
@@ -134,20 +169,54 @@ const CategoriesManager: React.FC = () => {
                             <label className="block text-sm font-semibold text-gray-900 mb-2">Subcategories</label>
                             <div className="space-y-2 mb-3">
                               {editData?.subcategories?.map((sub, idx) => (
-                                <div key={idx} className="flex gap-2">
-                                  <input
-                                    type="text"
-                                    value={sub.name}
-                                    onChange={(e) => handleSubcategoryChange(idx, e.target.value)}
-                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                    placeholder={`Subcategory ${idx + 1}`}
-                                  />
-                                  <button
-                                    onClick={() => handleRemoveSubcategory(idx)}
-                                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-semibold"
-                                  >
-                                    Remove
-                                  </button>
+                                <div key={idx} className="space-y-3 rounded-xl border border-gray-200 p-4">
+                                  <div className="flex gap-2">
+                                    <input
+                                      type="text"
+                                      value={sub.name}
+                                      onChange={(e) => handleSubcategoryChange(idx, e.target.value)}
+                                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                      placeholder={`Subcategory ${idx + 1}`}
+                                    />
+                                    <button
+                                      onClick={() => handleRemoveSubcategory(idx)}
+                                      className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-semibold"
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <label className="block text-xs font-semibold text-gray-700">Sub Subcategories</label>
+                                    {(sub.subSubcategories || []).length > 0 ? (
+                                      (sub.subSubcategories || []).map((subSub, subIdx) => (
+                                        <div key={subIdx} className="flex gap-2">
+                                          <input
+                                            type="text"
+                                            value={subSub.name}
+                                            onChange={(e) => handleSubSubcategoryChange(idx, subIdx, e.target.value)}
+                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                            placeholder={`Sub Subcategory ${subIdx + 1}`}
+                                          />
+                                          <button
+                                            onClick={() => handleRemoveSubSubcategory(idx, subIdx)}
+                                            className="bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 font-semibold"
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <p className="text-sm text-gray-500 italic">No sub subcategories</p>
+                                    )}
+
+                                    <button
+                                      onClick={() => handleAddSubSubcategory(idx)}
+                                      className="text-primary-600 font-semibold hover:underline text-sm"
+                                    >
+                                      + Add Sub Subcategory
+                                    </button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -189,12 +258,26 @@ const CategoriesManager: React.FC = () => {
                           <div className="flex flex-wrap gap-2">
                             {category.subcategories.length > 0 ? (
                               category.subcategories.map((sub, idx) => (
-                                <span
+                                <div
                                   key={idx}
-                                  className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                                  className="rounded-lg border border-green-200 bg-green-50 px-3 py-2"
                                 >
-                                  {sub.name}
-                                </span>
+                                  <p className="text-sm font-semibold text-green-900">{sub.name}</p>
+                                  <div className="mt-2 flex flex-wrap gap-2">
+                                    {(sub.subSubcategories || []).length > 0 ? (
+                                      (sub.subSubcategories || []).map((subSub, subIdx) => (
+                                        <span
+                                          key={subIdx}
+                                          className="inline-block px-2 py-1 bg-white text-green-800 rounded-full text-xs border border-green-200"
+                                        >
+                                          {subSub.name}
+                                        </span>
+                                      ))
+                                    ) : (
+                                      <span className="text-gray-500 text-xs italic">No sub subcategories</span>
+                                    )}
+                                  </div>
+                                </div>
                               ))
                             ) : (
                               <span className="text-gray-500 text-sm italic">No subcategories</span>

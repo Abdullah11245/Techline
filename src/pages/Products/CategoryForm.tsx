@@ -6,25 +6,74 @@ interface CategoryFormProps {
   onSuccess?: () => void;
 }
 
+interface SubcategoryForm {
+  name: string;
+  subSubcategories: string[];
+}
+
+const createEmptySubcategory = (): SubcategoryForm => ({
+  name: "",
+  subSubcategories: [""],
+});
+
 const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
   const [name, setName] = useState("");
-  const [subcategories, setSubcategories] = useState<string[]>([""]);
+  const [subcategories, setSubcategories] = useState<SubcategoryForm[]>([createEmptySubcategory()]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   const handleSubcategoryChange = (index: number, value: string) => {
-    const newSubs = [...subcategories];
-    newSubs[index] = value;
-    setSubcategories(newSubs);
+    setSubcategories((prev) =>
+      prev.map((sub, subIndex) => (subIndex === index ? { ...sub, name: value } : sub))
+    );
+  };
+
+  const handleSubSubcategoryChange = (subcategoryIndex: number, subSubcategoryIndex: number, value: string) => {
+    setSubcategories((prev) =>
+      prev.map((sub, subIndex) =>
+        subIndex === subcategoryIndex
+          ? {
+              ...sub,
+              subSubcategories: sub.subSubcategories.map((item, itemIndex) =>
+                itemIndex === subSubcategoryIndex ? value : item
+              ),
+            }
+          : sub
+      )
+    );
   };
 
   const addSubcategoryField = () => {
-    setSubcategories([...subcategories, ""]);
+    setSubcategories((prev) => [...prev, createEmptySubcategory()]);
   };
 
   const removeSubcategoryField = (index: number) => {
-    setSubcategories(subcategories.filter((_, i) => i !== index));
+    setSubcategories((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addSubSubcategoryField = (subcategoryIndex: number) => {
+    setSubcategories((prev) =>
+      prev.map((sub, subIndex) =>
+        subIndex === subcategoryIndex
+          ? { ...sub, subSubcategories: [...sub.subSubcategories, ""] }
+          : sub
+      )
+    );
+  };
+
+  const removeSubSubcategoryField = (subcategoryIndex: number, subSubcategoryIndex: number) => {
+    setSubcategories((prev) =>
+      prev.map((sub, subIndex) => {
+        if (subIndex !== subcategoryIndex) return sub;
+
+        const nextSubSubs = sub.subSubcategories.filter((_, itemIndex) => itemIndex !== subSubcategoryIndex);
+        return {
+          ...sub,
+          subSubcategories: nextSubSubs.length > 0 ? nextSubSubs : [""],
+        };
+      })
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,8 +88,13 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
         body: JSON.stringify({
           name,
           subcategories: subcategories
-            .filter((s) => s.trim() !== "")
-            .map((s) => ({ name: s.trim() })),
+            .filter((sub) => sub.name.trim() !== "")
+            .map((sub) => ({
+              name: sub.name.trim(),
+              subSubcategories: sub.subSubcategories
+                .filter((item) => item.trim() !== "")
+                .map((item) => ({ name: item.trim() })),
+            })),
         }),
       });
 
@@ -51,7 +105,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
 
       setSuccess(true);
       setName("");
-      setSubcategories([""]);
+      setSubcategories([createEmptySubcategory()]);
       if (onSuccess) onSuccess();
     } catch (err: any) {
       setError(err.message);
@@ -124,13 +178,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
           {subcategories.map((sub, idx) => (
             <motion.div
               key={idx}
-              className="flex gap-2 items-center"
+              className="rounded-xl border border-gray-200 bg-white/60 p-4 space-y-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
+              <div className="flex gap-2 items-center">
               <input
                 type="text"
-                value={sub}
+                value={sub.name}
                 onChange={(e) =>
                   handleSubcategoryChange(idx, e.target.value)
                 }
@@ -147,6 +202,40 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess }) => {
                   ×
                 </button>
               )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-gray-700">Sub Subcategories (optional)</label>
+                {sub.subSubcategories.map((item, subIdx) => (
+                  <div key={subIdx} className="flex gap-2 items-center">
+                    <input
+                      type="text"
+                      value={item}
+                      onChange={(e) => handleSubSubcategoryChange(idx, subIdx, e.target.value)}
+                      className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+                      placeholder={`Sub Subcategory ${subIdx + 1}`}
+                    />
+
+                    {sub.subSubcategories.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeSubSubcategoryField(idx, subIdx)}
+                        className="text-red-500 font-bold px-3 py-1 hover:bg-red-50 rounded-md transition"
+                      >
+                        x
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => addSubSubcategoryField(idx)}
+                  className="text-primary-600 font-semibold hover:underline text-sm"
+                >
+                  + Add Sub Subcategory
+                </button>
+              </div>
             </motion.div>
           ))}
 

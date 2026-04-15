@@ -10,6 +10,7 @@ interface Product {
   image: string;
   category: { _id: string; name: string };
   subcategory?: string;
+  subSubcategory?: string;
 }
 
 const ProductsManager: React.FC = () => {
@@ -184,9 +185,15 @@ const ProductsManager: React.FC = () => {
                                 />
                               </div>
                               <div>
-                                <label className="text-sm font-medium text-gray-700">Category (Locked)</label>
+                                <label className="text-sm font-medium text-gray-700">Category Path (Locked)</label>
                                 <div className="px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg mt-1">
                                   <p className="font-medium text-blue-900">{product.category?.name}</p>
+                                  {product.subcategory && (
+                                    <p className="text-sm text-blue-800 mt-1">Subcategory: {product.subcategory}</p>
+                                  )}
+                                  {product.subSubcategory && (
+                                    <p className="text-sm text-blue-700">Sub Subcategory: {product.subSubcategory}</p>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -236,9 +243,17 @@ const ProductsManager: React.FC = () => {
                           <p className="font-semibold text-gray-900 truncate">{product.title}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                            {product.category?.name}
-                          </span>
+                          <div className="space-y-2">
+                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                              {product.category?.name}
+                            </span>
+                            {product.subcategory && (
+                              <div className="text-sm text-gray-700">Subcategory: {product.subcategory}</div>
+                            )}
+                            {product.subSubcategory && (
+                              <div className="text-sm text-gray-600">Sub Subcategory: {product.subSubcategory}</div>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-gray-600 truncate text-sm max-w-xs">{product.description}</p>

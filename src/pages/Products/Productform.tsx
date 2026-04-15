@@ -6,7 +6,7 @@ import { authenticatedFetch, buildUrl } from '@/utils/api';
 interface Category {
   _id: string;
   name: string;
-  subcategories: { name: string }[];
+  subcategories: { name: string; subSubcategories?: { name: string }[] }[];
 }
 
 interface FormData {
@@ -14,6 +14,7 @@ interface FormData {
   description: string;
   category: string;
   subcategory: string;
+  subSubcategory: string;
 }
 
 const ProductForm = () => {
@@ -22,6 +23,7 @@ const ProductForm = () => {
     description: "",
     category: "",
     subcategory: "",
+    subSubcategory: "",
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -29,6 +31,7 @@ const ProductForm = () => {
   const [status, setStatus] = useState<"success" | "error" | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [newSubcategory, setNewSubcategory] = useState("");
+  const [newSubSubcategory, setNewSubSubcategory] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,7 +47,28 @@ const ProductForm = () => {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      if (name === "category") {
+        return { ...prev, category: value, subcategory: "", subSubcategory: "" };
+      }
+
+      if (name === "subcategory") {
+        return { ...prev, subcategory: value, subSubcategory: "" };
+      }
+
+      return { ...prev, [name]: value };
+    });
+
+    if (name === "category") {
+      setNewSubcategory("");
+      setNewSubSubcategory("");
+    }
+
+    if (name === "subcategory") {
+      setNewSubSubcategory("");
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +88,7 @@ const ProductForm = () => {
       data.append("description", formData.description);
       data.append("category", formData.category);
       data.append("subcategory", newSubcategory || formData.subcategory);
+      data.append("subSubcategory", newSubSubcategory || formData.subSubcategory);
       data.append("image", file);
 
       const res = await authenticatedFetch('/api/products', {
@@ -71,10 +96,12 @@ const ProductForm = () => {
         body: data,
       });
       if (!res.ok) throw new Error("Failed to upload product");
+      console.log(res)
 
       setStatus("success");
-      setFormData({ title: "", description: "", category: "", subcategory: "" });
+      setFormData({ title: "", description: "", category: "", subcategory: "", subSubcategory: "" });
       setNewSubcategory("");
+      setNewSubSubcategory("");
       setFile(null);
     } catch (err) {
       console.error(err);
@@ -85,7 +112,13 @@ const ProductForm = () => {
   };
 
   const selectedCategory = categories.find((c) => c._id === formData.category);
-
+ const selectedSubcategory =
+  selectedCategory?.subcategories.find(
+    (sub) => sub.name === formData.subcategory
+  ) ||
+  (newSubcategory
+    ? { name: newSubcategory, subSubcategories: [] }
+    : null);
   return (
     <div>
       <Section className="relative overflow-hidden pt-20 md:pt-32 pb-20" noAnimation>
@@ -276,13 +309,52 @@ const ProductForm = () => {
         )}
 
         {/* New Subcategory */}
-        <input
-          type="text"
-          placeholder="Or type a new subcategory"
-          value={newSubcategory}
-          onChange={(e) => setNewSubcategory(e.target.value)}
-          className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
-        />
+     {/* <input
+  type="text"
+  placeholder="Or type a new subcategory"
+  value={newSubcategory}
+  onChange={(e) => {
+    setNewSubcategory(e.target.value); // ✅ correct state
+    setFormData((prev) => ({
+      ...prev,
+      subcategory: "",       // clear dropdown selection
+      subSubcategory: "",    // reset subSub
+    }));
+    setNewSubSubcategory(""); // reset subSub input
+  }}
+  className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+/> */}
+        </div>
+
+        <div>
+          <p className="text-sm font-medium text-gray-700 px-2 py-1">Sub Subcategory</p>
+          {selectedSubcategory && (selectedSubcategory.subSubcategories?.length || 0) > 0 && (
+            <select
+              name="subSubcategory"
+              value={formData.subSubcategory}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition mb-6"
+            >
+              <option value="">Select Sub Subcategory (or type below)</option>
+              {selectedSubcategory.subSubcategories?.map((subSub, idx) => (
+                <option key={idx} value={subSub.name}>{subSub.name}</option>
+              ))}
+            </select>
+          )}
+
+         {/* <input
+  type="text"
+  placeholder="Or type a new sub subcategory"
+  value={newSubSubcategory}
+  onChange={(e) => {
+    setNewSubSubcategory(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      subSubcategory: "", // clear dropdown selection
+    }));
+  }}
+  className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+/> */}
         </div>
        
 

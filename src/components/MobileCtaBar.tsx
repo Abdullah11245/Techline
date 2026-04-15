@@ -8,7 +8,7 @@ import { siteConfig } from '@data/site';
 export const MobileCtaBar: React.FC = () => {
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t border-gray-200 shadow-lg z-40"
+      className="fixed bottom-0 left-0 right-0 hidden bg-white border-t border-gray-200 shadow-lg z-40"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.4 }}

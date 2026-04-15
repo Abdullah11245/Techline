@@ -423,9 +423,8 @@ export const Home: React.FC = () => {
   <LogoGrid
     type="certifications"
     logos={[
-      { src: '/iso-27001.jpg', alt: 'ISO 27001' },
+      { src: '/Screenshot 2026-04-14 130632.png', alt: '3CX' },
       // { src: '/9001.png', alt: 'ISO 9001' },
-      { src: '/GDPR.png', alt: 'GDPR Compliant' },
       // { src: '/industry.png', alt: 'Industry Partner' },
     ]}
   />

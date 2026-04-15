@@ -7,6 +7,7 @@ import Product from './pages/Products/product';
 import CategoryForm from './pages/Products/CategoryForm';
 import { AuthProvider } from '@/context/AuthContext';
 import RequireAuth from '@/components/RequireAuth';
+import ProductDetails from './pages/Products/productDetail/product_details';
 const AdminLogin = React.lazy(() => import('@pages/AdminLogin'));
 const AdminRegister = React.lazy(() => import('@pages/AdminRegister').then(m => ({ default: m.AdminRegister })));
 const AdminDashboard = React.lazy(() => import('@pages/AdminDashboard'));
@@ -57,6 +58,7 @@ function App() {
           <Route path="/admin/categories" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><CategoriesManager /></Suspense></RequireAuth>} />
           <Route path="/productForm" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><LeadForm /></Suspense></RequireAuth>} />
           <Route path="/products/:name" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense>} />
+          <Route path="/Products/productdetail/:id" element={<Suspense fallback={<LoadingFallback />}><ProductDetails /></Suspense>} />
           <Route path="/categoryForm" element={<RequireAuth><Suspense fallback={<LoadingFallback />}><CategoryForm /></Suspense></RequireAuth>} />
         </Route>
       </Routes>

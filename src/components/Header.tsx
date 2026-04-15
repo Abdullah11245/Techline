@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, Phone, ChevronDown } from 'lucide-react';
-import { Button } from './Button';
+import { Menu, X, Phone, ChevronDown, ChevronRight } from 'lucide-react';
 import { siteConfig } from '@data/site';
 import { useAuth } from '@/context/AuthContext';
-import { API_BASE_URL } from '@/utils/api';
+import { buildUrl } from '@/utils/api';
+import ProductDropdown from './Product_dropdown';
+
+interface SubSubcategoryItem {
+  name: string;
+}
+
+interface SubcategoryItem {
+  name: string;
+  subSubcategories?: SubSubcategoryItem[];
+}
+
+interface CategoryItem {
+  _id: string;
+  name: string;
+  subcategories?: SubcategoryItem[];
+}
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,32 +30,41 @@ export const Header: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const effectiveScrolled = isMobile ? true : isScrolled;
   const [productsOpen, setProductsOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
-React.useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/categories`);
-      const data = await res.json();
-      setCategories(data);
-    } catch (err) {
-      console.error("Failed to fetch categories", err);
-    }
-  };
+   const [mobproductsOpen, setMobproductsOpen] = useState(false);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [activeProductCategory, setActiveProductCategory] = useState<string | null>(null);
+  const [activeProductSubcategory, setActiveProductSubcategory] = useState<string | null>(null);
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null);
+  const [expandedMobileSubcategory, setExpandedMobileSubcategory] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<any>(null);
+  const [activeSubcategory, setActiveSubcategory] = useState<any>(null);  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(buildUrl('/api/categories'));
+        const data = await res.json();
+        console.log('Fetched categories:', data);
+        setCategories(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
 
-  fetchCategories();
-}, []);
+    fetchCategories();
+  }, []);
 
-React.useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 768); // md breakpoint (Tailwind)
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-  handleResize(); // set initial value
-  window.addEventListener("resize", handleResize);
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-    const links = [
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const links = [
     { to: "/services/it-support-infrastructure", label: "IT Support & Infrastructure" },
     { to: "/services/cyber-security", label: "Cyber Security Services" },
     { to: "/services/backup-business-continuity", label: "Backup & Business Continuity" },
@@ -68,7 +91,7 @@ const itemVariants = {
     transition: { duration: 0.5, ease: "easeOut" },
   },
 };
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -77,14 +100,62 @@ const itemVariants = {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
 
   const isActive = (href: string) => location.pathname === href;
+  const buildProductLink = (categoryName: string, subcategoryName?: string, subSubcategoryName?: string) => {
+    const searchParams = new URLSearchParams();
+
+    if (subcategoryName) {
+      searchParams.set('subcategory', subcategoryName);
+    }
+
+    if (subSubcategoryName) {
+      searchParams.set('subSubcategory', subSubcategoryName);
+    }
+
+    const search = searchParams.toString();
+    return `/products/${encodeURIComponent(categoryName)}${search ? `?${search}` : ''}`;
+  };
+
+  const clearCloseTimeout = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const closeProductMenus = () => {
+    setProductsOpen(false);
+    setActiveProductCategory(null);
+    setActiveProductSubcategory(null);
+    setExpandedMobileCategory(null);
+    setExpandedMobileSubcategory(null);
+  };
+
+  const handleProductMenuEnter = () => {
+    if (isMobile) return;
+    clearCloseTimeout();
+    setProductsOpen(true);
+    setServicesOpen(false);
+  };
+
+  const handleProductMenuLeave = () => {
+    if (isMobile) return;
+    closeTimeoutRef.current = setTimeout(() => {
+      closeProductMenus();
+    }, 300);
+  };
+
+  const handleProductsLinkClick = () => {
+    closeProductMenus();
+    setMobileMenuOpen(false);
+  };
 
   const navText = isScrolled ? 'text-gray-700' : 'text-black';
-  const navHover = 'text-black' 
+  const navHover = 'text-black';
   const iconColor = 'text-gray-900';
 
   return (
@@ -186,15 +257,9 @@ const itemVariants = {
 
 {/* <Link to="/productForm">Products</Link> */}
 <div
-  className="relative"
-  onMouseEnter={() => {
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    setProductsOpen(true);
-    setServicesOpen(false);
-  }}
-  onMouseLeave={() => {
-    closeTimeoutRef.current = setTimeout(() => setProductsOpen(false), 700);
-  }}
+  className="relative hidden md:block"
+  onMouseEnter={handleProductMenuEnter}
+  onMouseLeave={handleProductMenuLeave}
 >
   <button className={`flex items-center gap-1 text-md font-medium ${navText} ${navHover} transition-colors`}>
     Products
@@ -207,7 +272,7 @@ const itemVariants = {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 12 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 overflow-hidden"
+      className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
     >
       <motion.div
         variants={containerVariants}
@@ -215,27 +280,216 @@ const itemVariants = {
         animate="visible"
         exit="hidden"
       >
-        {categories?.map((cat: any) => (
-          <motion.div key={cat._id} variants={itemVariants}>
-            <Link
-              to={`/products/${cat.name}`}
-              className={`block px-4 py-2 text-sm font-medium transition-colors text-black ${navHover}`}
+        {categories.map((category) => {
+          const hasSubcategories = (category.subcategories?.length || 0) > 0;
+          const isCategoryActive = activeProductCategory === category._id;
+
+          return (
+            <motion.div
+              key={category._id}
+              variants={itemVariants}
+              className="relative"
+              onMouseEnter={() => {
+                setActiveProductCategory(category._id);
+                setActiveProductSubcategory(null);
+              }}
             >
-              <span
-                className={`relative
-                  after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full
-                  after:origin-left after:scale-x-0 after:bg-green-500
-                  after:transition-transform after:duration-500 after:ease-out
-                  hover:after:scale-x-100
-                `}
-              >
-                {cat.name}
-              </span>
-            </Link>
-          </motion.div>
-        ))}
+              <div className="flex items-center">
+                <Link
+                  to={buildProductLink(category.name)}
+                  onClick={handleProductsLinkClick}
+                  className={`flex-1 px-4 py-3 text-sm font-medium transition-colors text-black hover:bg-gray-50 ${navHover}`}
+                >
+                  <span className="relative after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-green-500 after:transition-transform after:duration-500 after:ease-out hover:after:scale-x-100">
+                    {category.name}
+                  </span>
+                </Link>
+                {hasSubcategories && (
+                  <button
+                    type="button"
+                    onMouseEnter={() => {
+                      setActiveProductCategory(category._id);
+                      setActiveProductSubcategory(null);
+                    }}
+                    className={`px-4 py-3 text-gray-500 transition-colors hover:bg-gray-50 ${
+                      isCategoryActive ? 'text-gray-900' : ''
+                    }`}
+                    aria-label={`Show ${category.name} subcategories`}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              {hasSubcategories && isCategoryActive && (
+                <div className="absolute left-full top-0 ml-1 w-56 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
+                  {category.subcategories?.map((subcategory) => {
+                    const subcategoryKey = `${category._id}-${subcategory.name}`;
+                    const hasSubSubcategories = (subcategory.subSubcategories?.length || 0) > 0;
+                    const isSubcategoryActive = activeProductSubcategory === subcategoryKey;
+
+                    return (
+                      <div
+                        key={subcategoryKey}
+                        className="relative"
+                        onMouseEnter={() => setActiveProductSubcategory(subcategoryKey)}
+                      >
+                        <div className="flex items-center">
+                          <Link
+                            to={buildProductLink(category.name, subcategory.name)}
+                            onClick={handleProductsLinkClick}
+                            className="flex-1 px-4 py-3 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                          >
+                            {subcategory.name}
+                          </Link>
+                          {hasSubSubcategories && (
+                            <button
+                              type="button"
+                              onMouseEnter={() => setActiveProductSubcategory(subcategoryKey)}
+                              className={`px-4 py-3 text-gray-500 transition-colors hover:bg-gray-50 ${
+                                isSubcategoryActive ? 'text-gray-900' : ''
+                              }`}
+                              aria-label={`Show ${subcategory.name} sub subcategories`}
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+
+                        {hasSubSubcategories && isSubcategoryActive && (
+                          <div className="absolute left-full top-0 ml-1 w-56 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
+                            {subcategory.subSubcategories?.map((subSubcategory) => (
+                              <Link
+                                key={`${subcategoryKey}-${subSubcategory.name}`}
+                                to={buildProductLink(category.name, subcategory.name, subSubcategory.name)}
+                                onClick={handleProductsLinkClick}
+                                className="block px-4 py-3 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                              >
+                                {subSubcategory.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
       </motion.div>
     </motion.div>
+  )}
+</div>
+<div className="md:hidden">
+  {/* PRODUCTS BUTTON */}
+  <button
+  onClick={() => {
+    setMobproductsOpen(!mobproductsOpen);
+    if (!mobproductsOpen) setServicesOpen(false);
+
+    // reset drill state when opening
+    if (!mobproductsOpen) {
+      setActiveCategory(null);
+      setActiveSubcategory(null);
+    }
+  }}
+    className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-900 font-medium"
+  >
+    Products
+    <ChevronDown
+      className={`w-4 h-4 transition-transform ${
+        mobproductsOpen  ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+
+  {/* MAIN DROPDOWN */}
+  {mobproductsOpen  && (
+    <div className="mt-2 bg-white rounded-lg shadow-sm p-2">
+
+      {/* ================= LEVEL 1: CATEGORIES ================= */}
+      {!activeCategory && (
+        <div className="space-y-2">
+          {categories.map((category) => (
+            <button
+              key={category._id}
+              onClick={() => setActiveCategory(category)}
+              className="w-full text-left px-4 py-2 rounded-md hover:bg-gray-100 font-medium"
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ================= LEVEL 2: SUBCATEGORIES ================= */}
+      {activeCategory && !activeSubcategory && (
+        <div>
+          {/* HEADER */}
+          <div className="flex items-center gap-2 px-2 py-2 border-b">
+            <button
+              onClick={() => setActiveCategory(null)}
+              className="text-sm text-gray-500"
+            >
+              ← Back
+            </button>
+            <span className="font-semibold">{activeCategory.name}</span>
+          </div>
+
+          {/* SUBCATEGORY LIST */}
+          <div className="mt-2 space-y-2">
+            {activeCategory.subcategories?.map((sub:any) => (
+              <button
+                key={sub.name}
+                onClick={() => setActiveSubcategory(sub)}
+                className="w-full text-left px-4 py-2 rounded-md hover:bg-gray-100"
+              >
+                {sub.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ================= LEVEL 3: SUB-SUBCATEGORIES ================= */}
+      {activeCategory && activeSubcategory && (
+        <div>
+          {/* HEADER */}
+          <div className="flex items-center gap-2 px-2 py-2 border-b">
+            <button
+              onClick={() => setActiveSubcategory(null)}
+              className="text-sm text-gray-500"
+            >
+              ← Back
+            </button>
+            <span className="font-semibold">
+              {activeSubcategory.name}
+            </span>
+          </div>
+
+          {/* SUB-SUBCATEGORY LIST */}
+          <div className="mt-2 space-y-2">
+            {activeSubcategory.subSubcategories?.map((subSub:any) => (
+              <Link
+                key={subSub.name}
+                to={buildProductLink(
+                  activeCategory.name,
+                  activeSubcategory.name,
+                  subSub.name
+                )}
+                onClick={handleProductsLinkClick}
+                className="block px-4 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+              >
+                {subSub.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+    </div>
   )}
 </div>
 
@@ -286,7 +540,10 @@ const itemVariants = {
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors text-black mr-2 bg-white/40"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+  setMobileMenuOpen(!mobileMenuOpen);
+  setProductsOpen(false);
+}}
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -407,17 +664,106 @@ const itemVariants = {
 
   {productsOpen && (
     <div className="ml-4 mt-2 space-y-2">
-      {categories.map((cat: any) => (
-        <Link
-          key={cat._id}
-          to={`/products/${cat.name}`}
-          className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
-        >
-          {cat.name}
-        </Link>
-      ))}
+      {categories.map((category) => {
+        const isCategoryExpanded = expandedMobileCategory === category._id;
+
+        return (
+          <div key={category._id} className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Link
+                to={buildProductLink(category.name)}
+                onClick={handleProductsLinkClick}
+                className="flex-1 px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
+              >
+                {category.name}
+              </Link>
+              {(category.subcategories?.length || 0) > 0 && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExpandedMobileCategory((prev) =>
+                      prev === category._id ? null : category._id
+                    )
+                  }
+                  className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+                  aria-label={`Toggle ${category.name} subcategories`}
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      isCategoryExpanded ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+              )}
+            </div>
+
+            {isCategoryExpanded && (
+              <div className="ml-4 space-y-2 border-l border-gray-200 pl-3">
+                {category.subcategories?.map((subcategory) => {
+                  const subcategoryKey = `${category._id}-${subcategory.name}`;
+                  const isSubcategoryExpanded = expandedMobileSubcategory === subcategoryKey;
+
+                  return (
+                    <div key={subcategoryKey} className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          to={buildProductLink(category.name, subcategory.name)}
+                          onClick={handleProductsLinkClick}
+                          className="flex-1 px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
+                        >
+                          {subcategory.name}
+                        </Link>
+                        {(subcategory.subSubcategories?.length || 0) > 0 && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setExpandedMobileSubcategory((prev) =>
+                                prev === subcategoryKey ? null : subcategoryKey
+                              )
+                            }
+                            className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+                            aria-label={`Toggle ${subcategory.name} sub subcategories`}
+                          >
+                            <ChevronDown
+                              className={`h-4 w-4 transition-transform ${
+                                isSubcategoryExpanded ? 'rotate-180' : ''
+                              }`}
+                            />
+                          </button>
+                        )}
+                      </div>
+
+                      {isSubcategoryExpanded && (
+                        <div className="ml-4 space-y-2 border-l border-gray-200 pl-3">
+                          {subcategory.subSubcategories?.map((subSubcategory) => (
+                            <Link
+                              key={`${subcategoryKey}-${subSubcategory.name}`}
+                              to={buildProductLink(category.name, subcategory.name, subSubcategory.name)}
+                              onClick={handleProductsLinkClick}
+                              className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 text-gray-700 transition-colors"
+                            >
+                              {subSubcategory.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
-  )}
+  )} 
+  {/* {productsOpen && (
+  <ProductDropdown
+    categories={categories}
+    buildProductLink={buildProductLink}
+    onClickLink={handleProductsLinkClick}
+  />
+)} */}
 </div>
               
               <div className="border-t border-gray-200 pt-4">
